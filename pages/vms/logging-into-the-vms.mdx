@@ -1,0 +1,29 @@
+# Logging in to the VMS
+
+## GraphQL Mutation Structure
+
+```graphql
+mutation login {
+  login(email: "email", password: "password", rememberMe: true) {
+    user {
+      id
+      roles {
+        name
+      }
+      email
+      firstName
+      middleName
+      lastName
+    }
+    token
+  }
+}
+```
+
+## Using CURL
+
+```shell
+curl --location --request POST '<API_ENDPOINT>' \
+--header 'Content-Type: application/json' \
+--data-raw '{"query":"mutation login {\n login(\n email: \"email\"\n password: \"password\" \n rememberMe: true\n ) {\n user {\n id\n roles {\n name\n }\n email\n firstName\n middleName\n lastName\n }\n token\n }\n}","variables":{}}'
+```
