@@ -1,0 +1,6 @@
+# `SASCs` (Semantic And Styling Components)
+
+- Contain twin.macro styled components.
+- SASCs would have no logic within them, and would contain mostly semantic HTML and the styling for that HTML. Of course, because of how we are using twin.macro and styled-components, the semantic HTML and the styling is created in the same component.  
+  Note that Tailwind makes the styling very simple, even for larger components. What might take 40 lines of CSS could take just one line with Tailwind. For this reason, we can safely merge the Semantic and Styling elements together.
+- SASCs would also render props, and use hook functions to pass data upwards (hoisting) into their parent CALCs

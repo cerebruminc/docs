@@ -1,0 +1,68 @@
+# `CALCs` (Composition And Logic Components)
+
+`CALCs` serve the following purposes:
+
+- They contain all business logic
+- They dispatch all calls to external functions that manipulate data.  
+  _This means we could break the logic into various functions/components, but all the interfaces with those external functions would still run through the CALC._
+
+- They interface with all external data and logic sources (e.g. APIs and SDKs)
+- They mediate all interfaces with the global state (Redux, Zustand, etc.)  
+  _Even if data is accessible from a global context in a lower-level SASC, it
+  should still always be fetched through the parent CALC. For example, if the user’s profile image is globally accessible through Context,
+  the CALC should first fetch it and then pass it down to a child SASC using either
+  props or the locally scoped Context/Jotai wrapper._
+
+- They compose `SASCs` into full components
+
+## Structure of a `CALC`
+
+In the case of a Navbar, the composition in the CALC might look like this:
+
+```tsx
+import tw, { styled } from "twin.macro";
+
+// Now we import the child SASCs
+import NavLogo from "./NavLogo";
+import NavSearchBar from "./NavSearchBar";
+import NavTabMenu from "./NavTabMenu";
+import NavUserMenuDialog from "./NavUserMenuDialog";
+
+// Here we build any necessary wrapper styled-components
+const NavWrapper = styled.nav(() => [
+  tw`relative z-20 flex items-center justify-center justify-between w-full h-20 mb-10 bg-white shadow-xl`,
+  `box-shadow: 0 12px 35px 0 rgba(90,90,220,0.13);`,
+]);
+
+interface ComponentProps {
+  navLogoImageSource: string;
+  navLogoAltText: string;
+  navUserMenuDialogImageSource: string;
+  navUserMenuDialogAltText: string;
+  navUserMenuDialogProfileName: string;
+}
+
+// The Nav component is the high level "Assembly component" where all the other components are assembled into a nav bar.
+// It is composed of the NavLogo, NavTabMenu, NavSearchBar, and NavUserMenuDialog components.
+export default function Nav(props: ComponentProps) {
+  const {
+    navLogoImageSource,
+    navLogoAltText,
+    navUserMenuDialogImageSource,
+    navUserMenuDialogAltText,
+    navUserMenuDialogProfileName,
+  } = props;
+  return (
+    <NavWrapper>
+      <NavLogo imageSource={navLogoImageSource} altText={navLogoAltText} />
+      <NavTabMenu />
+      <NavSearchBar />
+      <NavUserMenuDialog
+        profileImageSource={navUserMenuDialogImageSource}
+        profileImageAlt={navUserMenuDialogAltText}
+        profileName={navUserMenuDialogProfileName}
+      />
+    </NavWrapper>
+  );
+}
+```

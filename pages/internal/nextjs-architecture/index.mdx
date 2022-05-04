@@ -1,0 +1,43 @@
+import Bleed from "nextra-theme-docs/bleed";
+
+# Next.js Architecture Basics
+
+## Layout Components
+
+Layout Components function as parent components that arrange CALC-hydrated SASCs into larger views.
+
+## `CALCs`
+
+- All data interfaces with “external” sources (think APIs, etc.) flow through CALCs.
+- All business logic is written within the CALCs, and any external logical operations on data related to that component group would (at least) be mediated by the CALC. This also means that all CRUD operations would be handled within CALCs
+
+## `SASCs`
+
+- SASCs serve to create renderable JSX and hydrate that JSX with data from CALCs. The data that CALCs pass to SACs would be passed either through props or some locally-scoped Context/Jotai wrapper.
+- In some cases, SASCs may need to pass data back up to their parent CALCs. (For example, if someone adds an attachment or note to an order.) To do this, we can use the locally-scoped Zustand store to hoist the data from the SASC to the parent CALC, upon a certain trigger (like a button click).
+- If data from a SASC needs to be accessible globally, throughout the application, it should first be hoisted from the SASC to its parent CALC. The parent CALC can then have access to a global Context wrapper or data store like Redux, and can pass the hoisted data into that global Context store.
+
+<Bleed>
+  <div
+    style={{
+      left: 0,
+      width: "100%",
+      height: 0,
+      position: "relative",
+      paddingBottom: "75%",
+    }}
+  >
+    <iframe
+      src="https://lucid.app/documents/embeddedchart/d7bfd07a-2a45-47d2-9ac0-cbb335635562?invitationId=inv_ec00bed2-e79a-4586-9de9-cb878a110223#"
+      style={{
+        top: 0,
+        left: 0,
+        position: "absolute",
+        width: `100%`,
+        height: `100%`,
+        border: 0,
+      }}
+      allowfullscreen
+    ></iframe>
+  </div>
+</Bleed>
